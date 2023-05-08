@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.17.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.9.1"
+    },
+    "version": "1.17.1",
+    "libraryName": "crudcompnp",
+    "libraryId": "2334015b-075c-4e63-9040-fe6e5854fc1b",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "crudcompnp",
+    "solutionShortDescription": "crudcompnp description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

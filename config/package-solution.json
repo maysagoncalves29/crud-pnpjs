@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "crudcompnp-client-side-solution",
+    "id": "2334015b-075c-4e63-9040-fe6e5854fc1b",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.17.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "crudcompnp description"
+      },
+      "longDescription": {
+        "default": "crudcompnp description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "crudcompnp Feature",
+        "description": "The feature that activates elements of the crudcompnp solution.",
+        "id": "15bb06b8-3b2d-4ced-8f03-d9f75d2d535c",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/crudcompnp.sppkg"
+  }
+}
