@@ -26,7 +26,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     super();
     const params = new URLSearchParams(location.search);
     this._selectedItemId = params.get("itemId");
-    //this.readAluno();
+    this.readAluno();
     
   }
 
@@ -40,14 +40,16 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
         <td>Name</td>
         <td><input type='text' id='name'/></td>
       </tr>
-      <td>Escolas</td>
-      <td>
-        <select id="escolas">
-        </select>
-      </td>
+        <td>Escolas</td>
+        <td>
+          <select id="escolas">
+          </select>
+        </td>
+      </tr>
       <tr>
         <td>Aluno Email</td>
         <td><input type='text' id='email'/></td>
+        
       </tr>
       <tr>
         <td>Aluno Aprovado</td>
@@ -56,7 +58,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       <tr>
         <td>Aluno Sala</td>
         <td>
-          <select id='alunoSala'>
+          <select id='alunoSala' multiple>
             <option value='Fundamental I'>Fundamental I</option>
             <option value='Fundamental II'>Fundamental II</option>
             <option value='Ensino Médio'>Ensino Médio</option>
@@ -68,10 +70,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
         <td><input type='text' id='alunoCidade'/></td>
       </tr>
       <tr>
-      <tr>
-        <td>Responsável</td>
-        <td><input type='text' id='responsavel'/></td>
-      </tr>
         <td>
           <input type='submit' value='Insert' id='btnInsert'/>
           <input type='submit' value='Update' id='btnUpdate'/>
@@ -86,6 +84,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     `;
     this.bindEvent();
     this.readAluno();
+    
   
    
   }
@@ -106,19 +105,23 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     const Name : string = (document.getElementById("name") as HTMLInputElement).value
     const Email : string = (document.getElementById("email") as HTMLInputElement).value;
     const Aprovado : boolean = (document.getElementById("aprovado") as HTMLInputElement).checked;
-    const AlunoSala : string = (document.getElementById("alunoSala") as HTMLInputElement).value;
     const AlunoCidade : string = (document.getElementById("alunoCidade") as HTMLInputElement).value;
     const Escolas : string = (document.getElementById("escolas") as HTMLSelectElement).value;  
-    const Responsavel : string = (document.getElementById("responsavel") as HTMLInputElement).value;
-   
+    let AlunoSala = (document.getElementById("alunoSala") as HTMLSelectElement).selectedOptions;
+    let OpcoesSala = [];
+    for(let i = 0; i < AlunoSala.length; i++){
+      OpcoesSala.push(AlunoSala[i].value);
+    }
+    console.log(OpcoesSala);
     sp.web.lists.getByTitle("Students").items.add({
       Title: AlunoCidade,
       Name: Name,
       Email: Email,
       Aprovado: Aprovado,
-      AlunoSala: parseInt(AlunoSala),
-      Escolas: parseInt(Escolas),
-      Responsavel: Responsavel
+      AlunoSala: { results: OpcoesSala },
+      EscolasId:  parseInt(Escolas),
+      //AlunoSalaChoices: { results: choices },
+      //Responsavel: parseInt(Responsavel)
 
      
     }).then((_response: unknown) => { 
@@ -131,19 +134,26 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     const Name : string = (document.getElementById("name") as HTMLInputElement).value
     const Email : string = (document.getElementById("email") as HTMLInputElement).value;
     const Aprovado : boolean = (document.getElementById("aprovado") as HTMLInputElement).checked;
-    const AlunoSala : string = (document.getElementById("alunoSala") as HTMLInputElement).value;
     const AlunoCidade : string = (document.getElementById("alunoCidade") as HTMLInputElement).value;
     const Escolas : string = (document.getElementById("escolas") as HTMLSelectElement).value;
-    const Responsavel : string = (document.getElementById("responsavel") as HTMLInputElement).value;   
+    let AlunoSala = (document.getElementById("alunoSala") as HTMLSelectElement).selectedOptions;
+    let OpcoesSala = [];
+    for(let i = 0; i < AlunoSala.length; i++){
+      OpcoesSala.push(AlunoSala[i].value);
+    }
+    console.log(OpcoesSala);
 
     sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).update({
+
+      //sp.web.lists.getByTitle("Students").fields.addMultiChoice("AlunoSala", {Choices: choices}), 
       Title: AlunoCidade,
       Name: Name,
       Email: Email,
       Aprovado: Aprovado,
-      AlunoSala: AlunoSala,
+      AlunoSala: { results: OpcoesSala  },
       EscolasId: parseInt(Escolas),
-      Responsavel: Responsavel
+      //AlunoSalaChoices: { results: choices },
+     //ResponsavelId: parseInt(Responsavel)
 
 
     }).then((_response: unknown) => { 
@@ -167,25 +177,27 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
 
 }
   private readAluno() : void {
+    
 
 
     //sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select( "Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title", "Participativos").expand("Escolas").get().then((item) => {
       //sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("AlunoSala").get().then((item) => {
-        sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title", "Responsavel/Title").expand("Escolas", "Responsavel").get().then((item) => {
+        sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title").expand("Escolas").get().then((item) => {
       
-          // eslint-disable-next-line no-void
-          void sp.web.lists.getByTitle("Escola").items.select("Title").getAll().then((escolas) => {
+          // eslint-disable-next-line no-void, @typescript-eslint/no-floating-promises
+          sp.web.lists.getByTitle("Escola").items.select("Title", "Id").getAll().then((escolas) => {
             let select = document.getElementById('escolas');
-            for (let i = 0; i < escolas.length; i++){
-              const option = document.createElement("option");
-              option.text = escolas[i].Title;
+            escolas.forEach((escola) => {
+              let option = document.createElement('option');
+              option.text = escola.Title;
+              option.value = escola.Id;
               select.appendChild(option)
-            }
+            })
           })
       
       let saida: string = "";
       for (let i: number = 0; i < item.length; i++) { 
-        saida += `Name: ${item[i].Name}, Email: ${item[i].Email}, Aprovado: ${item[i].Aprovado}, Aluno Sala: ${item[i].AlunoSala}, Aluno Cidade: ${item[i].Title}, Escolas: ${item[i].Escolas.Title},  Responsavel: ${item[i].Responsavel.Title}\n`; 
+        saida += `Name: ${item[i].Name}, Email: ${item[i].Email}, Aprovado: ${item[i].Aprovado}, Aluno Sala: ${item[i].AlunoSala}, Aluno Cidade: ${item[i].Title}, Escolas: ${item[i].EscolasId.Title}\n`; 
       }
       const nameElement = document.getElementById("name") as HTMLInputElement;
       if (nameElement) {
@@ -213,14 +225,9 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       }
       const escolasElement = document.getElementById("escolas") as HTMLSelectElement;
       if (escolasElement) {
-        escolasElement.value = item.Escolas.Title;
-      }
-      const responsavelElement = document.getElementById("responsavel") as HTMLInputElement;
-      if (responsavelElement) {
-        responsavelElement.value = item.Responsavel.Title;
+        escolasElement.value = item.EscolasId.Title;
       }
       
-
     console.log(item);
     document.getElementById("MsgStatus").innerText = saida;
     return saida;
@@ -229,6 +236,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     console.log(error);
     });
   }
+
   
   
 
