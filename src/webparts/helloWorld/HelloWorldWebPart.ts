@@ -80,8 +80,19 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
   </div>
   <div id="MsgStatus"></div>
 </div>
-
     `;
+    sp.web.lists.getByTitle("Escola").items.select("Title", "Id").get().then((items: any[]) => {
+      const dropdown = document.getElementById("escolas") as HTMLSelectElement;
+      for (const item of items) {
+        const option = document.createElement("option");
+        option.value = item.Id;
+        option.text = item.Title;
+        dropdown.add(option);
+      }
+    }).catch((error: any) => {
+      console.log(error);
+    });
+    
     this.bindEvent();
     this.readAluno();
     
@@ -152,8 +163,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       Aprovado: Aprovado,
       AlunoSala: { results: OpcoesSala  },
       EscolasId: parseInt(Escolas),
-      //AlunoSalaChoices: { results: choices },
-     //ResponsavelId: parseInt(Responsavel)
 
 
     }).then((_response: unknown) => { 
@@ -177,28 +186,48 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
 
 }
   private readAluno() : void {
-    
-
-
-    //sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select( "Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title", "Participativos").expand("Escolas").get().then((item) => {
-      //sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("AlunoSala").get().then((item) => {
-        sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title").expand("Escolas").get().then((item) => {
+    if(this._selectedItemId == null) {
+      sp.web.lists.getByTitle("Escola").items.get().then((response) => {
+        const escolasSelect = document.getElementById("escolas") as HTMLSelectElement;
+        escolasSelect.innerHTML = "";
+        response.forEach((item : any) => {
+          const option = document.createElement("option");
+          option.value = item.Id.toString();
+          option.text = item.Title;
+          escolasSelect.add(option);
+        });
+      }).catch((error) => {
+        console.log(error);
+      });
+    } else {
+        sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).select("Aprovado", "Email", "Name", "AlunoSala", "Title", "Escolas/Title", "Escolas/Id").expand("Escolas").get().then((item) => {
+          
+        
       
           // eslint-disable-next-line no-void, @typescript-eslint/no-floating-promises
-          sp.web.lists.getByTitle("Escola").items.select("Title", "Id").getAll().then((escolas) => {
-            let select = document.getElementById('escolas');
-            escolas.forEach((escola) => {
-              let option = document.createElement('option');
-              option.text = escola.Title;
-              option.value = escola.Id;
-              select.appendChild(option)
-            })
-          })
-      
+          sp.web.lists.getByTitle("Escola").items.get().then((response) => {
+            const escolasSelect = document.getElementById("escolas") as HTMLSelectElement;
+            escolasSelect.innerHTML = "";
+            response.forEach((item : any) => {
+              const option = document.createElement("option");
+              option.value = item.Id.toString();
+              option.text = item.Title;
+              escolasSelect.add(option);
+            });
+      if (escolasSelect) {
+        escolasSelect.value = item.Escolas.Id;
+      }
+          }).catch((error) => {
+            console.log(error);
+          });
+      console.log("foi");
       let saida: string = "";
       for (let i: number = 0; i < item.length; i++) { 
-        saida += `Name: ${item[i].Name}, Email: ${item[i].Email}, Aprovado: ${item[i].Aprovado}, Aluno Sala: ${item[i].AlunoSala}, Aluno Cidade: ${item[i].Title}, Escolas: ${item[i].EscolasId.Title}\n`; 
+        saida += `Name: ${item[i].Name}, Email: ${item[i].Email}, Aprovado: ${item[i].Aprovado}, Aluno Sala: ${item[i].AlunoSala}, Aluno Cidade: ${item[i].Title}, Escolas: ${item[i].Escolas}\n`; 
       }
+
+
+
       const nameElement = document.getElementById("name") as HTMLInputElement;
       if (nameElement) {
         nameElement.value = item.Name; 
@@ -216,17 +245,21 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
   
       const alunoSalaElement = document.getElementById("alunoSala") as HTMLSelectElement;
       if (alunoSalaElement) {
-        alunoSalaElement.value = item.AlunoSala;
+        const values = ["Fundamental I", "Fundamental II", "Ensino Médio"];
+        for (let i = 0; i < alunoSalaElement.options.length; i++) {
+          const option = alunoSalaElement.options[i];
+          option.selected = values.indexOf(option.value) >= 0;   
+      }
+      alunoSalaElement.value = item.AlunoSala;
+      console.log("oie")
+       
       }
   
       const alunoCidadeElement = document.getElementById("alunoCidade") as HTMLInputElement;
       if (alunoCidadeElement) {
         alunoCidadeElement.value = item.Title;
       }
-      const escolasElement = document.getElementById("escolas") as HTMLSelectElement;
-      if (escolasElement) {
-        escolasElement.value = item.EscolasId.Title;
-      }
+      
       
     console.log(item);
     document.getElementById("MsgStatus").innerText = saida;
@@ -236,6 +269,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     console.log(error);
     });
   }
+}
 
   
   
