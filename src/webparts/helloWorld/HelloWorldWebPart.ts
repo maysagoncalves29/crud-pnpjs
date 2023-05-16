@@ -7,6 +7,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'HelloWorldWebPartStrings';
+import styles from './styles.scss';
 
 import pnp, { sp } from 'sp-pnp-js';
 import "@pnp/sp/webs";
@@ -33,53 +34,45 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
 
   public render(): void {
     this.domElement.innerHTML = `
-    <div>
-  <div>
-    <table border='5'>
-      <tr>
-        <td>Name</td>
-        <td><input type='text' id='name'/></td>
-      </tr>
-        <td>Escolas</td>
-        <td>
-          <select id="escolas">
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Aluno Email</td>
-        <td><input type='text' id='email'/></td>
-        
-      </tr>
-      <tr>
-        <td>Aluno Aprovado</td>
-        <td><input type='checkbox' id='aprovado'/></td>
-      </tr>
-      <tr>
-        <td>Aluno Sala</td>
-        <td>
-          <select id='alunoSala' multiple>
-            <option value='Fundamental I'>Fundamental I</option>
-            <option value='Fundamental II'>Fundamental II</option>
-            <option value='Ensino Médio'>Ensino Médio</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Aluno Cidade</td>
-        <td><input type='text' id='alunoCidade'/></td>
-      </tr>
-      <tr>
-        <td>
-          <input type='submit' value='Insert' id='btnInsert'/>
-          <input type='submit' value='Update' id='btnUpdate'/>
-          <input type='submit' value='Delete' id='btnDelete'/>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div id="MsgStatus"></div>
+    <div class="${styles}"></div>
+    <div class="formulario">
+  <form>
+    <div class="form-row">
+      <label for="name">Name:</label>
+      <input type="text" id="name">
+    </div>
+    <div class="form-row">
+      <label for="escolas">Escolas:</label>
+      <select id="escolas"></select>
+    </div>
+    <div class="form-row">
+      <label for="email">Aluno Email:</label>
+      <input type="text" id="email">
+    </div>
+    <div class="form-row">
+      <label for="aprovado">Aluno Aprovado:</label>
+      <input type="checkbox" id="aprovado">
+    </div>
+    <div class="form-row">
+      <label for="alunoSala">Aluno Sala:</label>
+      <select id="alunoSala" multiple>
+        <option value="Fundamental I">Fundamental I</option>
+        <option value="Fundamental II">Fundamental II</option>
+        <option value="Ensino Médio">Ensino Médio</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="alunoCidade">Aluno Cidade:</label>
+      <input type="text" id="alunoCidade" >
+    </div>
+    <div class="form-row">
+      <input type="submit" value="Insert" id="btnInsert">
+      <input type="submit" value="Update" id="btnUpdate" >
+      <input type="submit" value="Delete" id="btnDelete">
+    </div>
+  </form>
 </div>
+
     `;
     sp.web.lists.getByTitle("Escola").items.select("Title", "Id").get().then((items: any[]) => {
       const dropdown = document.getElementById("escolas") as HTMLSelectElement;
@@ -95,19 +88,24 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     
     this.bindEvent();
     this.readAluno();
-    
-  
-   
   }
 
  
 
   
   private bindEvent(): void {
-    this.domElement.querySelector('#btnInsert').addEventListener('click', () => { this.insertAluno(); });
-    this.domElement.querySelector('#btnUpdate').addEventListener('click', () => { this.updateAluno(); });
-    this.domElement.querySelector('#btnDelete').addEventListener('click', () => { this.deleteAluno(); });
-  
+    this.domElement.querySelector('#btnInsert').addEventListener('click', (event) => {
+      event.preventDefault();
+      this.insertAluno();
+    });
+    this.domElement.querySelector('#btnUpdate').addEventListener('click', (event) => {
+      event.preventDefault();
+      this.updateAluno();
+    });
+    this.domElement.querySelector('#btnDelete').addEventListener('click', (event) => {
+      event.preventDefault();
+      this.deleteAluno();
+    });
   }
  
   
@@ -132,9 +130,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       AlunoSala: { results: OpcoesSala },
       EscolasId:  parseInt(Escolas),
       //AlunoSalaChoices: { results: choices },
-      //Responsavel: parseInt(Responsavel)
-
-     
+      //Responsavel: parseInt(Responsavel)     
     }).then((_response: unknown) => { 
       alert('Add: Success!');
     }).catch((error: unknown) => {

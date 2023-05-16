@@ -1,0 +1,59 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.formulario {
+  font-family: Arial, sans-serif;
+  max-width: 500px;
+  margin: 0 auto;
+
+  form {
+    background-color: rgba(255, 80, 49, 0.795);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    //transform: translate(-50%);
+
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+      text-align: center;
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 5px solid #030202;
+        font-size: 16px;
+
+        &:focus {
+          outline: none;
+          border-color: #00bcd4;
+        }
+      }
+
+      input[type="checkbox"] {
+        margin-right: 5px;
+      }
+    }
+
+    input[type="submit"] {
+      background-color: #d43900;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px 5px 15px;
+
+      &:hover {
+        background-color: #f1762a;
+      }
+    }
+  }
+}
