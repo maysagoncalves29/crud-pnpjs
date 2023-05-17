@@ -15,7 +15,6 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 
 
-
 export interface IHelloWorldWebPartProps {
   description: string;
 }
@@ -55,20 +54,23 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     </div>
     <div class="form-row">
       <label for="alunoSala">Aluno Sala:</label>
+      <div class="custom-select">
       <select id="alunoSala" multiple>
         <option value="Fundamental I">Fundamental I</option>
         <option value="Fundamental II">Fundamental II</option>
         <option value="Ensino Médio">Ensino Médio</option>
       </select>
+      <div class="select-dropdown"></div>
+    </div>
     </div>
     <div class="form-row">
       <label for="alunoCidade">Aluno Cidade:</label>
       <input type="text" id="alunoCidade" >
     </div>
     <div class="form-row">
-      <input type="submit" value="Insert" id="btnInsert">
-      <input type="submit" value="Update" id="btnUpdate" >
-      <input type="submit" value="Delete" id="btnDelete">
+      <input type="submit" value="Cadastrar Aluno" id="btnInsert">
+      <input type="submit" value="Atualizar Aluno" id="btnUpdate" >
+      <input type="submit" value="Deletar Aluno" id="btnDelete">
     </div>
   </form>
 </div>
@@ -241,13 +243,14 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
   
       const alunoSalaElement = document.getElementById("alunoSala") as HTMLSelectElement;
       if (alunoSalaElement) {
-        const values = ["Fundamental I", "Fundamental II", "Ensino Médio"];
+        //const values = ["Fundamental I", "Fundamental II", "Ensino Médio"];
+        const values = item.AlunoSala
         for (let i = 0; i < alunoSalaElement.options.length; i++) {
           const option = alunoSalaElement.options[i];
           option.selected = values.indexOf(option.value) >= 0;   
       }
-      alunoSalaElement.value = item.AlunoSala;
-      console.log("oie")
+      //alunoSalaElement.value = item.AlunoSala;
+      //console.log("oie")
        
       }
   
