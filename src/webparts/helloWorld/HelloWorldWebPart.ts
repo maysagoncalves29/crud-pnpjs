@@ -36,26 +36,28 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     <div class="${styles}"></div>
     <div class="formulario">
   <form>
+
     <div class="form-row">
-      <label for="name">Name:</label>
-      <input type="text" id="name">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" placeholder="Digite o nome do Aluno.">
     </div>
     <div class="form-row">
       <label for="escolas">Escolas:</label>
-      <select id="escolas"></select>
+      <select id="escolas" placeholder="Selecione a escola do Aluno."></select>
     </div>
     <div class="form-row">
-      <label for="email">Aluno Email:</label>
-      <input type="text" id="email">
+      <label for="email">Email:</label>
+      <input type="text" id="email" placeholder="Digite o e-mail do responsável ou do Aluno">
     </div>
     <div class="form-row">
-      <label for="aprovado">Aluno Aprovado:</label>
+      <label for="aprovado">Aprovado?</label>
+      <label for="aprovado">Para aluno aprovado, marcar a opção abaixo:</label>
       <input type="checkbox" id="aprovado">
     </div>
     <div class="form-row">
-      <label for="alunoSala">Aluno Sala:</label>
+      <label for="alunoSala">Sala:</label>
       <div class="custom-select">
-      <select id="alunoSala" multiple>
+      <select id="alunoSala" multiple >
         <option value="Fundamental I">Fundamental I</option>
         <option value="Fundamental II">Fundamental II</option>
         <option value="Ensino Médio">Ensino Médio</option>
@@ -64,13 +66,13 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     </div>
     </div>
     <div class="form-row">
-      <label for="alunoCidade">Aluno Cidade:</label>
-      <input type="text" id="alunoCidade" >
+      <label for="alunoCidade">Cidade:</label>
+      <input type="text" id="alunoCidade" placeholder="Digite a cidade do Aluno.">
     </div>
     <div class="form-row">
       <input type="submit" value="Cadastrar Aluno" id="btnInsert">
       <input type="submit" value="Atualizar Aluno" id="btnUpdate" >
-      <input type="submit" value="Deletar Aluno" id="btnDelete">
+      <input type="submit" value="Remover Aluno" id="btnDelete">
     </div>
   </form>
 </div>
@@ -134,7 +136,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       //AlunoSalaChoices: { results: choices },
       //Responsavel: parseInt(Responsavel)     
     }).then((_response: unknown) => { 
-      alert('Add: Success!');
+      alert('Aluno cadastrado com Sucesso!');
     }).catch((error: unknown) => {
       console.log(error);
     });
@@ -164,7 +166,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
 
 
     }).then((_response: unknown) => { 
-      alert('Update: Success!');
+      alert('Aluno atualizado com sucesso!');
     }).catch((error: unknown) => { 
       console.log(error);
       this.displayMessage("Nao foi!")
@@ -175,8 +177,8 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
 
     
     sp.web.lists.getByTitle("Students").items.getById(this._selectedItemId).delete().then(() => {
-      console.log("Item excluído com sucesso");
-      this.displayMessage("Item deletado com sucesso!");
+      console.log("Aluno excluído com sucesso");
+      this.displayMessage("Aluno excluído com sucesso");
   }).catch((error) => {
       console.log(`Ocorreu um erro ao excluir o item: ${error}`);
       this.displayMessage("Não foi!");
