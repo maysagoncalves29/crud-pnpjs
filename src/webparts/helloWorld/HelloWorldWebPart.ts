@@ -27,14 +27,17 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
     const params = new URLSearchParams(location.search);
     this._selectedItemId = params.get("itemId");
     this.readAluno();
+
+    
     
   }
 
 
   public render(): void {
-    this.domElement.innerHTML = `
+      this.domElement.innerHTML = `
     <div class="${styles}"></div>
     <div class="formulario">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <form>
 
     <div class="form-row">
@@ -50,8 +53,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       <input type="text" id="email" placeholder="Digite o e-mail do responsável ou do Aluno">
     </div>
     <div class="form-row">
-      <label for="aprovado">Aprovado?</label>
-      <label for="aprovado">Para aluno aprovado, marcar a opção abaixo:</label>
+      <label for="aprovado">Aprovado? Se o aluno foi aprovado, selecionar opção abaixo. </label>
       <input type="checkbox" id="aprovado">
     </div>
     <div class="form-row">
@@ -70,14 +72,16 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
       <input type="text" id="alunoCidade" placeholder="Digite a cidade do Aluno.">
     </div>
     <div class="form-row">
-      <input type="submit" value="Cadastrar Aluno" id="btnInsert">
-      <input type="submit" value="Atualizar Aluno" id="btnUpdate" >
-      <input type="submit" value="Remover Aluno" id="btnDelete">
+    <button type="submit" id="btnUpdate" ${this._selectedItemId ? '' : 'style="display:none;"'}><i class="fas fa-pencil-alt"></i> Atualizar Aluno</button>
+    <button type="submit" id="btnDelete" ${this._selectedItemId ? '' : 'style="display:none;"'}><i class="fas fa-trash"></i> Remover Aluno</button>
+    <button type="submit" id="btnInsert" ${this._selectedItemId ? 'style="display:none;"' : ''}><i class="fas fa-plus"></i> Cadastrar Aluno</button>
+    
     </div>
   </form>
 </div>
 
     `;
+    
     sp.web.lists.getByTitle("Escola").items.select("Title", "Id").get().then((items: any[]) => {
       const dropdown = document.getElementById("escolas") as HTMLSelectElement;
       for (const item of items) {
